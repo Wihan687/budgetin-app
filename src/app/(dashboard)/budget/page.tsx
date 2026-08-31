@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Header } from "@/components/common/Header";
 import { Sidebar } from "@/components/common/Sidebar";
 import { Plus, Target, AlertTriangle, CheckCircle2, Trash2, X, Eye, Receipt, Calendar } from "lucide-react";
-import { formatRupiah, formatDate } from "@/lib/utils";
+import { formatRupiah, formatDate, formatNumberWithDots, parseNumberFromDots } from "@/lib/utils";
 
 const CATEGORIES = [
   { id: "FOOD", label: "Makanan & Minuman" },
@@ -106,7 +106,8 @@ export default function BudgetPage() {
     e.preventDefault();
     setError(null);
 
-    if (!limitAmount || Number(limitAmount) <= 0) {
+    const parsedLimit = parseNumberFromDots(limitAmount);
+    if (!limitAmount || parsedLimit <= 0) {
       setError("Batas nominal harus lebih dari 0");
       return;
     }
@@ -118,7 +119,7 @@ export default function BudgetPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           category,
-          limitAmount: Number(limitAmount),
+          limitAmount: parsedLimit,
           month,
           year,
         }),
@@ -436,10 +437,10 @@ export default function BudgetPage() {
                   Batas Anggaran Bulanan (Rp)
                 </label>
                 <input
-                  type="number"
-                  placeholder="500000"
+                  type="text"
+                  placeholder="500.000"
                   value={limitAmount}
-                  onChange={(e) => setLimitAmount(e.target.value)}
+                  onChange={(e) => setLimitAmount(formatNumberWithDots(e.target.value))}
                   className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold focus:outline-none focus:ring-2 focus:ring-emerald-400"
                   required
                 />

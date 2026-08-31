@@ -22,7 +22,7 @@ import {
   ShieldCheck,
   PieChart,
 } from "lucide-react";
-import { formatRupiah } from "@/lib/utils";
+import { formatRupiah, formatNumberWithDots, parseNumberFromDots } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { CompleteReceiptAnalysis, ReceiptItem, CategoryType } from "@/services/scanner.service";
 
@@ -559,11 +559,11 @@ export default function ScannerPage() {
                               </select>
                               <div className="flex items-center gap-2">
                                 <input
-                                  type="number"
-                                  value={item.amount}
+                                  type="text"
+                                  value={formatNumberWithDots(item.amount)}
                                   onChange={(e) => {
                                     const copy = [...editItems];
-                                    copy[idx].amount = Number(e.target.value);
+                                    copy[idx].amount = parseNumberFromDots(e.target.value);
                                     setEditItems(copy);
                                   }}
                                   className="p-2 text-xs border border-gray-300 rounded-lg bg-white font-bold w-full"

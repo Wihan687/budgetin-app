@@ -21,3 +21,16 @@ export function formatDate(date: string | Date): string {
     year: "numeric",
   }).format(new Date(date));
 }
+
+export function formatNumberWithDots(value: string | number | null | undefined): string {
+  if (value === undefined || value === null || value === "") return "";
+  const raw = String(value).replace(/\D/g, "");
+  if (!raw) return "";
+  return new Intl.NumberFormat("id-ID").format(Number(raw));
+}
+
+export function parseNumberFromDots(value: string | number | null | undefined): number {
+  if (!value) return 0;
+  const raw = String(value).replace(/\D/g, "");
+  return raw ? Number(raw) : 0;
+}

@@ -12,7 +12,7 @@ import {
   Trash2,
   X,
 } from "lucide-react";
-import { formatRupiah } from "@/lib/utils";
+import { formatRupiah, formatNumberWithDots, parseNumberFromDots } from "@/lib/utils";
 
 const CATEGORIES = [
   { id: "FOOD", label: "Makanan & Minuman" },
@@ -97,7 +97,7 @@ export default function TransactionsPage() {
     setEditingTx(tx);
     setFormData({
       type: tx.type,
-      amount: tx.amount.toString(),
+      amount: formatNumberWithDots(tx.amount),
       category: tx.category,
       description: tx.description || "",
       date: new Date(tx.date).toISOString().split("T")[0],
@@ -120,7 +120,8 @@ export default function TransactionsPage() {
     e.preventDefault();
     setFormError(null);
 
-    if (!formData.amount || Number(formData.amount) <= 0) {
+    const parsedAmount = parseNumberFromDots(formData.amount);
+    if (!formData.amount || parsedAmount <= 0) {
       setFormError("Jumlah nominal harus lebih besar dari 0");
       return;
     }
@@ -135,7 +136,10 @@ export default function TransactionsPage() {
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          amount: parsedAmount,
+        }),
       });
 
       const json = await res.json();
@@ -416,11 +420,11 @@ export default function TransactionsPage() {
                   Nominal (Rp)
                 </label>
                 <input
-                  type="number"
-                  placeholder="50000"
+                  type="text"
+                  placeholder="50.000"
                   value={formData.amount}
                   onChange={(e) =>
-                    setFormData({ ...formData, amount: e.target.value })
+                    setFormData({ ...formData, amount: formatNumberWithDots(e.target.value) })
                   }
                   className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 font-bold"
                   required

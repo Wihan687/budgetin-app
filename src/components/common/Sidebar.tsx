@@ -38,8 +38,8 @@ export function Sidebar({ isOpenMobile, onCloseMobile }: SidebarProps) {
       {/* Logo */}
       <div className="flex items-center justify-between px-6 py-5 border-b border-emerald-900/50">
         <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-xl bg-emerald-400 flex items-center justify-center shadow-lg">
-            <Wallet className="h-5 w-5 text-emerald-950" />
+          <div className="h-9 w-9 rounded-xl bg-emerald-400/10 p-0.5 flex items-center justify-center shadow-lg shrink-0">
+            <img src="/logo.png" alt="Budgetin Logo" className="h-full w-full object-contain rounded-lg" />
           </div>
           <div>
             <span className="text-lg font-bold text-white">Budgetin</span>
